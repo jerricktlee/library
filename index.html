@@ -6,6 +6,7 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Library</title>
    <link rel="stylesheet" href="styles/style.css">
+   <link rel="icon" type="image/x-icon" href="images/favicon.ico">
    <script src="javascript/javascript.js" defer></script>
 </head>
 <body>
@@ -14,30 +15,29 @@
    </header>
 
    <div class="main">
+      <dialog id="modal">
+         <form method="dialog">
+            <h2>Add new book</h2>
+         
+            <label for="title" hidden>Title</label>
+            <input class="book-input" type="text" id="title" name="title" placeholder="Title" required/>
+            <label for="author" hidden>Author</label>
+            <input class="book-input" type="text" id="author" name="author" placeholder="Author" />
+            <label for="pages" hidden>Pages</label>
+            <input class="book-input" type="number" id="pages" name="pages" placeholder="Pages" required/>
+         
+            <div id="read-container">
+               <label for="read">Have you read yet?</label>
+               <input id="read-checkbox" type="checkbox" id="read" name="read" />
+            </div>
+            <button id="submit-btn">Submit</button>
+            <button id="close-btn">Close</button>
+         </form>
+      </dialog>
       <button id="add-btn">+ Add book</button>
 
       <div class="book-container">
-         <div class="card">
-            <p>"Perfume"</p>
-            <p>NCT DoJaeJung</p>
-            <p>1 page</p>
-            <button class="read-btn">Read</button>
-            <button class="remove-btn">Remove</button>
-         </div>
-         <div class="card">
-            <p>"Perfume"</p>
-            <p>NCT DoJaeJung</p>
-            <p>1 page</p>
-            <button class="read-btn">Read</button>
-            <button class="remove-btn">Remove</button>
-         </div>
-         <div class="card">
-            <p>"Perfume"</p>
-            <p>NCT DoJaeJung</p>
-            <p>1 page</p>
-            <button class="read-btn">Read</button>
-            <button class="remove-btn">Remove</button>
-         </div>
+
       </div>
    </div>
 
