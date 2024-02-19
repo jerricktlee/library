@@ -1,8 +1,4 @@
-const myLibrary = [
-   new Book("The Lightning Thief", "Rick Riordan", 377, true),
-   new Book("The Sea of Monsters", "Rick Riordan", 279, true),
-   new Book("The Titan's Curse", "Rick Riordan", 312, true)
-];
+const myLibrary = [];
 
 const addBtn = document.querySelector('#add-btn');
 const bookContainer = document.querySelector('.book-container');
@@ -19,6 +15,14 @@ function Book(title, author, pages, read) {
    this.read = read;
 }
 
+Book.prototype.toggleRead = function() {
+   if (this.read) {
+      this.read = false;
+   } else {
+      this.read = true;
+   }
+}
+
 function addBookToLibrary(title, author, pages, read) {
    const newBook = new Book(title, author, pages, read);
    myLibrary.push(newBook);
@@ -33,10 +37,11 @@ function clickOutsideToClose(e) {
 function closeModalHandler() {
    dialog.removeEventListener('click', clickOutsideToClose);
    dialog.close();
+   form.reset();
 }
 
 function displayBooks() {
-   myLibrary.forEach((book) => {
+   myLibrary.forEach((book, index) => {
       const bookCard = document.createElement('div');
       const title = document.createElement('p');
       const author = document.createElement('p');
@@ -54,10 +59,8 @@ function displayBooks() {
          readBtn.textContent = 'Not read';
          readBtn.className = 'not-read-btn';
       }
-      addReadEventListener(readBtn);
       removeBtn.textContent = 'Remove';
       removeBtn.className = 'remove-btn';
-
       bookCard.className = 'card';
       bookCard.appendChild(title);
       bookCard.appendChild(author);
@@ -65,7 +68,10 @@ function displayBooks() {
       bookCard.appendChild(readBtn);
       bookCard.appendChild(removeBtn);
       
-      console.log(bookCard);
+      bookCard.setAttribute('index', index);
+
+      addReadEventListener(readBtn);
+      addRemoveEventListener(removeBtn);
 
       bookContainer.appendChild(bookCard);
    });
@@ -73,15 +79,38 @@ function displayBooks() {
 
 function addReadEventListener(readBtn) {
    readBtn.addEventListener('click', () => {
-      if (readBtn.className === 'read-btn') {
+      if (myLibrary[readBtn.parentNode.getAttribute('index')].read) {
          readBtn.textContent = 'Not read';
          readBtn.className = 'not-read-btn';
-      }
-      else if (readBtn.className === 'not-read-btn') {
+      } else {
          readBtn.textContent = 'Read';
          readBtn.className = 'read-btn';
       }
+      console.log(myLibrary[readBtn.parentNode.getAttribute('index')].read);
+      myLibrary[readBtn.parentNode.getAttribute('index')].toggleRead();
+      console.log(myLibrary[readBtn.parentNode.getAttribute('index')].read);
    });
+}
+
+function addRemoveEventListener(removeBtn) {
+   removeBtn.addEventListener('click', () => {
+      const index = removeBtn.parentNode.getAttribute('index');
+      const childToRemove = document.querySelector(`.card:nth-child(${+index+1})`);
+      myLibrary.splice(index,1);
+      childToRemove.parentNode.removeChild(childToRemove);
+      resetDisplay();
+   });
+}
+
+function clearDisplay() {
+   while(bookContainer.firstChild) {
+      bookContainer.removeChild(bookContainer.firstChild);
+   }
+}
+
+function resetDisplay() {
+   clearDisplay();
+   displayBooks();
 }
 
 addBtn.addEventListener('click', () => {
@@ -103,7 +132,6 @@ form.addEventListener('submit', (e) => {
    const read = data.get("read") === 'on' ? true : false;
 
    form.reset();
-   console.log(`title: ${title}\mauthor: ${author}\npages: ${pages}\nread: ${read}`);
    addBookToLibrary(title, author, pages, read);
-   displayBooks();
+   resetDisplay();
 });
