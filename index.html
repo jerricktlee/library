@@ -16,22 +16,22 @@
 
    <div class="main">
       <dialog id="modal">
-         <form method="dialog">
+         <form id="book-form">
             <h2>Add new book</h2>
          
-            <label for="title" hidden>Title</label>
+            <label for="title" typehidden>Title</label>
             <input class="book-input" type="text" id="title" name="title" placeholder="Title" required/>
             <label for="author" hidden>Author</label>
             <input class="book-input" type="text" id="author" name="author" placeholder="Author" />
             <label for="pages" hidden>Pages</label>
-            <input class="book-input" type="number" id="pages" name="pages" placeholder="Pages" required/>
+            <input class="book-input" type="number" id="pages" name="pages" placeholder="Pages" min="1" max="10000" required/>
          
             <div id="read-container">
-               <label for="read">Have you read yet?</label>
+               <label for="read">Have you read it yet?</label>
                <input id="read-checkbox" type="checkbox" id="read" name="read" />
             </div>
-            <button id="submit-btn">Submit</button>
-            <button id="close-btn">Close</button>
+            <button type="submit" id="submit-btn">Submit</button>
+            <button type="button" id="close-btn">Close</button>
          </form>
       </dialog>
       <button id="add-btn">+ Add book</button>

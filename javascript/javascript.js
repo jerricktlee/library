@@ -9,6 +9,8 @@ const bookContainer = document.querySelector('.book-container');
 const dialog = document.querySelector('#modal');
 const showBtn = document.querySelector('#add-btn');
 const closeBtn = document.querySelector('#close-btn');
+const submitBtn = document.querySelector('#submit-btn');
+const form = document.querySelector('#book-form');
 
 function Book(title, author, pages, read) {
    this.title = title;
@@ -22,25 +24,15 @@ function addBookToLibrary(title, author, pages, read) {
    myLibrary.push(newBook);
 }
 
-addBtn.addEventListener('click', () => {
-   dialog.showModal();
-   dialog.addEventListener('click', clickOutsideToClose);
-});
-
-closeBtn.addEventListener('click', (e) => {
-   closeModalHandler();
-});
-
 function clickOutsideToClose(e) {
    if (e.target.id === 'modal') {
       closeModalHandler();
    }
 }
 
-function closeModalHandler(e) {
+function closeModalHandler() {
    dialog.removeEventListener('click', clickOutsideToClose);
    dialog.close();
-   e.preventDefault();
 }
 
 function displayBooks() {
@@ -62,6 +54,7 @@ function displayBooks() {
          readBtn.textContent = 'Not read';
          readBtn.className = 'not-read-btn';
       }
+      addReadEventListener(readBtn);
       removeBtn.textContent = 'Remove';
       removeBtn.className = 'remove-btn';
 
@@ -77,3 +70,40 @@ function displayBooks() {
       bookContainer.appendChild(bookCard);
    });
 }
+
+function addReadEventListener(readBtn) {
+   readBtn.addEventListener('click', () => {
+      if (readBtn.className === 'read-btn') {
+         readBtn.textContent = 'Not read';
+         readBtn.className = 'not-read-btn';
+      }
+      else if (readBtn.className === 'not-read-btn') {
+         readBtn.textContent = 'Read';
+         readBtn.className = 'read-btn';
+      }
+   });
+}
+
+addBtn.addEventListener('click', () => {
+   dialog.showModal();
+   dialog.addEventListener('click', clickOutsideToClose);
+});
+
+closeBtn.addEventListener('click', (e) => {
+   closeModalHandler();
+});
+
+form.addEventListener('submit', (e) => {
+   e.preventDefault();
+   dialog.close();
+   const data = new FormData(form);
+   const title = data.get("title");
+   const author = data.get("author");
+   const pages = data.get("pages");
+   const read = data.get("read") === 'on' ? true : false;
+
+   form.reset();
+   console.log(`title: ${title}\mauthor: ${author}\npages: ${pages}\nread: ${read}`);
+   addBookToLibrary(title, author, pages, read);
+   displayBooks();
+});
